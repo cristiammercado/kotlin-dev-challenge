@@ -1,0 +1,36 @@
+spring:
+  application:
+    name: mcontigo-api
+  profiles:
+    active: development
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/mcontigo
+    username: postgres
+    password: s3cr3tp4ssw0rd
+  cloud:
+    config:
+      enabled: false
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+        time_zone: UTC
+      org:
+        hibernate:
+          envers:
+            default_schema: public
+            store_data_at_delete: true
+
+debug: false
+
+server:
+  port: 8080
+
+clients:
+  coindesk-api:
+    url: https://api.coindesk.com
