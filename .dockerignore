@@ -1,0 +1,3 @@
+# Ignore everything except some build files
+**
+!build/libs/golito-api.jar
