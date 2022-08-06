@@ -43,6 +43,8 @@ class BTCControllerTest {
 
     private val coinDeskMock = CoinDeskMock(8092)
 
+    private val format = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
+
     @BeforeAll
     fun loadMock() {
         coinDeskMock.startMockServer()
@@ -85,22 +87,13 @@ class BTCControllerTest {
                 content().contentType(MediaType.APPLICATION_JSON),
                 jsonPath("$[0].fiatType", Matchers.equalTo(element3.fiatType.toString())),
                 jsonPath("$[0].price", Matchers.equalTo(element3.price?.toDouble())),
-                jsonPath(
-                    "$[0].lastUpdate",
-                    Matchers.equalTo(element3.lastUpdate?.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS")))
-                ),
+                jsonPath("$[0].lastUpdate", Matchers.containsString(element3.lastUpdate?.format(format))),
                 jsonPath("$[1].fiatType", Matchers.equalTo(element2.fiatType.toString())),
                 jsonPath("$[1].price", Matchers.equalTo(element2.price?.toDouble())),
-                jsonPath(
-                    "$[1].lastUpdate",
-                    Matchers.equalTo(element2.lastUpdate?.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS")))
-                ),
+                jsonPath("$[1].lastUpdate", Matchers.containsString(element2.lastUpdate?.format(format))),
                 jsonPath("$[2].fiatType", Matchers.equalTo(element1.fiatType.toString())),
                 jsonPath("$[2].price", Matchers.equalTo(element1.price?.toDouble())),
-                jsonPath(
-                    "$[2].lastUpdate",
-                    Matchers.equalTo(element1.lastUpdate?.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS")))
-                ),
+                jsonPath("$[2].lastUpdate", Matchers.containsString(element1.lastUpdate?.format(format)))
             )
 
     }
@@ -121,10 +114,7 @@ class BTCControllerTest {
                 content().contentType(MediaType.APPLICATION_JSON),
                 jsonPath("$.fiatType", Matchers.equalTo(element.fiatType.toString())),
                 jsonPath("$.price", Matchers.equalTo(element.price?.toDouble())),
-                jsonPath(
-                    "$.lastUpdate",
-                    Matchers.equalTo(element.lastUpdate?.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS")))
-                )
+                jsonPath("$.lastUpdate", Matchers.containsString(element.lastUpdate?.format(format)))
             )
 
     }
