@@ -2,12 +2,12 @@ spring:
   application:
     name: mcontigo-api
   profiles:
-    active: development
+    active: ${ENVIRONMENT:development}
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/mcontigo
-    username: postgres
-    password: s3cr3tp4ssw0rd
+    url: jdbc:postgresql://${DB_HOST:localhost}:5432/${DB_NAME:mcontigo}
+    username: ${DB_USER:postgres}
+    password: ${DB_PASS:s3cr3tp4ssw0rd}
   cloud:
     config:
       enabled: false
@@ -26,6 +26,15 @@ spring:
             default_schema: public
             store_data_at_delete: true
 
+feign:
+  client:
+    config:
+      coindesk-api:
+        logger-level: basic
+        connect-timeout: 15000
+        read-timeout: 15000
+        follow-redirects: true
+
 debug: false
 
 server:
@@ -33,4 +42,4 @@ server:
 
 clients:
   coindesk-api:
-    url: https://api.coindesk.com
+    url: ${COINDESK_URL:https://api.coindesk.com}

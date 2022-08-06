@@ -7,12 +7,10 @@ import com.mcontigo.api.dto.price.BTCPriceMapper
 import com.mcontigo.api.model.enums.FiatType
 import com.mcontigo.api.repositories.BTCRepository
 import com.mcontigo.api.services.BTCService
-import org.slf4j.LoggerFactory
+import org.springframework.data.domain.Sort
 import org.springframework.http.HttpStatus
-import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Service
 import org.springframework.web.server.ResponseStatusException
-import java.time.LocalDateTime
 
 @Service
 class BTCServiceImpl(
@@ -22,10 +20,8 @@ class BTCServiceImpl(
     private val btcPriceMapper: BTCPriceMapper
 ) : BTCService {
 
-    private val logger = LoggerFactory.getLogger(javaClass)
-
     override fun fetchAll(): List<BTCPriceDTO> {
-        return repository.findAll()
+        return repository.findAll(Sort.by(Sort.Direction.DESC, "lastUpdate"))
             .map(btcPriceMapper::toDto)
     }
 
@@ -35,13 +31,10 @@ class BTCServiceImpl(
             .orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND) }
     }
 
-    @Async
     override fun syncBtcPrice() {
-        logger.info("Started sync of BTC price at {}", LocalDateTime.now())
         val dto = client.currentPrice()
         val list = coinDeskMapper.toListModel(dto)
         repository.saveAll(list)
-        logger.info("Finished sync of BTC price at {}", LocalDateTime.now())
     }
 
 }

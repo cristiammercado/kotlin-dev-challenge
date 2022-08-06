@@ -5,7 +5,7 @@ import org.hibernate.annotations.DynamicUpdate
 import org.springframework.data.annotation.LastModifiedDate
 import java.io.Serializable
 import java.math.BigDecimal
-import java.time.LocalDateTime
+import java.time.ZonedDateTime
 import javax.persistence.*
 
 @Table(name = "btc_prices")
@@ -23,6 +23,6 @@ class BTCPrice(
 
     @Column(name = "last_update")
     @LastModifiedDate
-    var lastUpdate: LocalDateTime? = LocalDateTime.now()
+    var lastUpdate: ZonedDateTime? = ZonedDateTime.now()
 
 ) : Serializable
