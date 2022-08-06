@@ -1,16 +1,13 @@
-version: "3"
-
-volumes:
-  database_data:
-    driver: local
+version: '3.9'
 
 services:
-  db-getting-started-java:
-    image: postgres:alpine
-    container_name: db-getting-started-java
-    restart: always
+  db:
+    container_name: db
+    image: postgres:latest
+    hostname: db
+    restart: unless-stopped
     environment:
-      POSTGRES_DB: dev
+      POSTGRES_DB: mcontigo
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: s3cr3tp4ssw0rd
     ports:
@@ -22,3 +19,25 @@ services:
       interval: 10s
       timeout: 10s
       retries: 3
+
+  api:
+    container_name: api
+    image: 'kotlin-dev-challenge:latest'
+    build:
+      context: .
+    hostname: api
+    restart: unless-stopped
+    environment:
+      - DB_HOST=db
+      - DB_NAME=mcontigo
+      - DB_USER=postgres
+      - DB_PASS=s3cr3tp4ssw0rd
+    ports:
+      - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  database_data:
+    driver: local

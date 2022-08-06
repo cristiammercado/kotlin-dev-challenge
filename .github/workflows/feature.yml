@@ -1,0 +1,26 @@
+name: Feature CI
+
+on:
+  push:
+    branches:
+      - feature/**
+
+jobs:
+  deploy:
+    name: Feature branch
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2.4.2
+      - name: Set up JDK
+        uses: actions/setup-java@v3.4.1
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+          cache: 'gradle'
+      - name: Test and compile project
+        run: |
+          chmod +x ./gradlew
+          ./gradlew clean build --no-daemon
+    environment:
+      name: Feature
