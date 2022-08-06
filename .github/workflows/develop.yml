@@ -1,0 +1,32 @@
+name: Beta CI
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  deploy:
+    name: Develop branch
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+          cache: 'gradle'
+      - name: Test and compile project
+        run: |
+            chmod +x ./gradlew
+            ./gradlew clean build --no-daemon
+      - name: Create and push docker image
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
+          docker build -t "${{ github.repository }}:beta" .
+          docker tag "${{ github.repository }}:beta" "ghcr.io/${{ github.repository }}:beta"
+          docker image push "ghcr.io/${{ github.repository }}:beta"
+    environment:
+      name: Beta
