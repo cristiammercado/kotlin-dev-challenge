@@ -1,0 +1,57 @@
+name: Production CI
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    name: Master branch
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+          cache: 'gradle'
+      - name: Test and compile project
+        run: |
+            chmod +x ./gradlew
+            ./gradlew upgradeVersion --no-daemon
+            ./gradlew clean build --no-daemon
+      - name: Create and push docker image
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
+          docker build -t "${{ github.repository }}:latest" .
+          docker tag "${{ github.repository }}:latest" "ghcr.io/${{ github.repository }}:latest"
+          docker image push "ghcr.io/${{ github.repository }}:latest"
+      - name: Commit and push version change
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git status
+          git add VERSION
+          git commit -m "[skip ci] Updated production project version."
+          CURRENT_VERSION=$(<VERSION)
+          git tag "v${CURRENT_VERSION}"
+          git push --tags origin master
+      - name: Backport master changes to develop
+        run: |
+          git fetch --all && git checkout develop && git pull origin develop
+          git merge --no-ff master -m "[skip ci] Backport from master"
+          git push origin develop
+      - name: Update beta version
+        run: |
+          chmod +x ./gradlew
+          ./gradlew upgradeVersion --no-daemon
+          git add VERSION
+          git commit -m "[skip ci] Updated SNAPSHOT project version."
+          git push origin develop
+    environment:
+      name: Production
