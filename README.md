@@ -113,11 +113,11 @@ gradlew.bat clean build # Windows
 ./gradlew clean build # Linux/Unix
 ```
 
-Once the project is compiled, a file will be generated in the `build/libs` directory called `api-[VERSION].jar`. This file should already run with the JRE installed on your computer. The simple way to do it would be:
+Once the project is compiled, a file will be generated in the `build/libs` directory called `mcontigo-api.jar`. This file should already run with the JRE installed on your computer. The simple way to do it would be:
 
 ```bash
 cd build/libs
-java -jar api-[VERSION].jar
+java -jar mcontigo-api.jar
 ```
 
 This command would start the application with the default configuration (development).

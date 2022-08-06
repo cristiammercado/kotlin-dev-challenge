@@ -5,7 +5,7 @@ FROM azul/zulu-openjdk-alpine:17-jre-headless
 RUN mkdir /app && cd /app
 
 # Copy files to working dir
-COPY build/libs/*.jar /app/api.jar
+COPY build/libs/mcontigo-api.jar /app/api.jar
 
 # Use /app as the working directory
 WORKDIR /app
