@@ -18,7 +18,7 @@ An extensive implementation is made in the code of the framework's own annotatio
 
 #### **ARCHITECTURE** ####
 
-![](docs/arch.png)
+![Architecture](docs/arch.jpg)
 
 For this exercise I have decided to use a layered architecture. The layered architecture consists of dividing the application into several layers, with the intention that each layer has a well-defined role, in this particular case, a rule control layer and REST validations, a business rules layer (services ) and a data access layer (Repository), this with the purpose of achieving a more natural and objective separation of responsibilities within the API.
 
