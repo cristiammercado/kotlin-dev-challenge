@@ -17,7 +17,7 @@ end_of_line = crlf
 [*.yml]
 indent_size = 2
 
-[*.conf]
+[*.json]
 indent_size = 2
 
 [LICENSE]

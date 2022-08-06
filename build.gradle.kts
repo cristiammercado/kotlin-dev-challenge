@@ -57,6 +57,10 @@ dependencies {
     kapt("org.mapstruct:mapstruct-processor:1.5.2.Final")
 
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("com.github.tomakehurst:wiremock:2.27.2")
+    testImplementation("com.h2database:h2")
+    testImplementation("net.datafaker:datafaker:1.5.0")
+
 }
 
 dependencyManagement {
