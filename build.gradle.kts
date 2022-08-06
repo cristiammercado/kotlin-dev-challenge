@@ -103,6 +103,11 @@ tasks.withType<JavaCompile> {
     options.encoding = "UTF-8"
 }
 
+tasks.bootJar {
+    archiveBaseName.set("mcontigo")
+    archiveVersion.set("api")
+}
+
 tasks.register("upgradeVersion") {
     group = PublishingPlugin.PUBLISH_TASK_GROUP
     description = "Upgrade application version"
