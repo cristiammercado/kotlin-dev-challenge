@@ -3,11 +3,11 @@ name: Production CI
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   deploy:
-    name: Master branch
+    name: Main branch
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -40,11 +40,11 @@ jobs:
           git commit -m "[skip ci] Updated production project version."
           CURRENT_VERSION=$(<VERSION)
           git tag "v${CURRENT_VERSION}"
-          git push --tags origin master
+          git push --tags origin main
       - name: Backport master changes to develop
         run: |
           git fetch --all && git checkout develop && git pull origin develop
-          git merge --no-ff master -m "[skip ci] Backport from master"
+          git merge --no-ff main -m "[skip ci] Backport from main"
           git push origin develop
       - name: Update beta version
         run: |
